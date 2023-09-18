@@ -123,6 +123,7 @@ async def syncall(ctx):
         await ctx.message.delete()
         await ctx.send(":x: You do not have the required permissions to use this command.", delete_after=5)
 
+# COMMAND: removeall
 @client.command()
 async def removeall(ctx):
     if ctx.author.guild_permissions.manage_roles:
