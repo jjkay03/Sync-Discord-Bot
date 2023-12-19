@@ -1,4 +1,4 @@
-# Sync-Discord-bot
+# <img alt="Static Badge" src="https://slackmojis.com/emojis/61723-usagyuuun-loading/download" width="35"> Sync-Discord-bot
 A Discord bot that sync multiple roles across two servers
 
 - To use the bot you just have to add it to both server, make sure it has perms to give roles.
