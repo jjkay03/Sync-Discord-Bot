@@ -10,3 +10,19 @@ A Discord bot that sync multiple roles across two servers
 - `sync <@user or User ID>` - Sync roles for a specific user.
 - `syncall` - Sync roles from main server for everyone in the sync server.
 - `removeall` - Remove all sync roles from everyone in the sync server.
+
+## Cofiguration:
+To configure the bot you just have to change the values at the top of `app,py`.
+```py
+# The sync server will copy the roles from the main server
+main_server_id = 302087475385539007 # The ID of the main server
+sync_server_id = 302087475385539007 # The ID of the sync server
+
+# This is the role map, ID of a role on the main server and its equivalent on the sync server
+# Main server role ID : Sync server role ID
+role_id_map = {
+    302087475385539007 : 302087475385539007, # Role 1
+    302087475385539007 : 302087475385539007, # Role 2
+    302087475385539007 : 302087475385539007 # Role 3
+}
+```
