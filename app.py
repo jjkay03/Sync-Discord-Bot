@@ -4,6 +4,9 @@ import discord
 from discord.ext import commands
 from discord.ext.commands import check
 import asyncio
+import logging
+
+logging.basicConfig(level=logging.INFO, format=f'\x1b[30;1m%(asctime)s\x1b[0m %(levelname)-8s\x1b[0m \x1b[35mBot\x1b[0m %(message)s')
 
 intents = discord.Intents.default(); intents.message_content=True; intents.members=True
 client = commands.Bot(command_prefix = "s.", intents=intents)
@@ -43,7 +46,7 @@ async def on_member_update(before, after):
 @client.event
 async def on_member_join(member):
     if member.guild.id == sync_server_id:
-        print(f"[>] Synchronized roles for {member.name} as they joined the Sync Server.")
+        logging.info(f"[>] Synchronized roles for {member.name} as they joined the Sync Server.")
         await sync_roles(client.get_guild(main_server_id), member.guild, member.id)
 
 
@@ -54,16 +57,16 @@ async def sync_roles(main_server, sync_server, user_id):
     sync_member = sync_server.get_member(user_id)
 
     if main_member is None:
-        print(f"[D] User with ID {user_id} not found in Main Server."); return
+        logging.info(f"[D] User with ID {user_id} not found in Main Server."); return
     if sync_member is None:
-        print(f"[D] User with ID {user_id} not found in Sync Server."); return
+        logging.info(f"[D] User with ID {user_id} not found in Sync Server."); return
 
     sync_roles_to_remove = [role for role in sync_member.roles if role.id in role_id_map.values()]
 
     # Remove sync roles from the user on the sync server
     if sync_roles_to_remove:
         await sync_member.remove_roles(*sync_roles_to_remove, reason="Removing sync roles.")
-        print(f"[-] Cleared sync roles the role for {sync_member.name} in the Sync Server.")
+        logging.info(f"[-] Cleared sync roles the role for {sync_member.name} in the Sync Server.")
 
     main_user_roles = [role.id for role in main_member.roles]
     sync_user_roles = [role.id for role in sync_member.roles]
@@ -75,7 +78,7 @@ async def sync_roles(main_server, sync_server, user_id):
             sync_role = sync_server.get_role(sync_role_id)
             if sync_role:
                 await sync_member.add_roles(sync_role, reason="Syncing roles from the main server.")
-                print(f"[+] Gave {sync_member.name} the role {sync_role.name} in the Sync Server.")
+                logging.info(f"[+] Gave {sync_member.name} the role {sync_role.name} in the Sync Server.")
 
 
 # -- COMMANDS -------------------------------------------------------------------
@@ -115,7 +118,7 @@ async def syncall(ctx):
 
         for member in sync_server.members:
             await sync_roles(main_server, sync_server, member.id)
-            print(f"[!] Synchronized roles for {member.name} in the Sync Server.")
+            logging.info(f"[!] Synchronized roles for {member.name} in the Sync Server.")
 
         await ctx.send(":ballot_box_with_check: Roles have been synced for all members on the sync server!")
 
@@ -138,7 +141,7 @@ async def removeall(ctx):
             sync_roles = [role for role in member.roles if role.id in role_id_map.values()]
             if sync_roles:
                 await member.remove_roles(*sync_roles, reason="Removing all sync roles.")
-                print(f"[-] Removed sync roles from {member.name} in the Sync Server.")
+                logging.info(f"[-] Removed sync roles from {member.name} in the Sync Server.")
 
         await ctx.send(":ballot_box_with_check: Removed all sync roles from everyone on the sync server!")
 
