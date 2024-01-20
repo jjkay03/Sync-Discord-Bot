@@ -55,7 +55,7 @@ async def sync_roles(main_server, sync_server, user_id):
     sync_member = sync_server.get_member(user_id)
 
     if main_member is None:
-        print(f"[D] User with ID {user_id} not found in Main Server."); return
+        print(f"[D] User with ID {user_id} not found in Main Server.")
     if sync_member is None:
         print(f"[D] User with ID {user_id} not found in Sync Server."); return
 
@@ -66,6 +66,10 @@ async def sync_roles(main_server, sync_server, user_id):
         await sync_member.remove_roles(*sync_roles_to_remove, reason="Removing sync roles.")
         print(f"[-] Cleared sync roles the role for {sync_member.name} in the Sync Server.")
 
+    # Return after role clear if not on main server
+    if main_member is None:
+        return
+    
     main_user_roles = [role.id for role in main_member.roles]
     sync_user_roles = [role.id for role in sync_member.roles]
 
