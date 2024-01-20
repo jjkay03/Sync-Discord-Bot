@@ -37,6 +37,7 @@ async def on_ready():
 @client.event
 async def on_member_update(before, after):
     if before.roles != after.roles and before.guild.id == main_server_id:
+        print(f"[>] Synchronized roles for {member.name} as they updated in the Main Server.")
         await sync_roles(before.guild, client.get_guild(sync_server_id), before.id)
 
 # On member join
